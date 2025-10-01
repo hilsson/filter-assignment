@@ -1,0 +1,17 @@
+<form [formGroup]="form">
+  <mat-form-field appearance="fill">
+    <mat-label>Event</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Select event"
+      formControlName="event"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEvent">
+      @for (event of filteredEvents$ | async; track event.type) {
+      <mat-option [value]="event">{{ event.type }}</mat-option
+      >}
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
