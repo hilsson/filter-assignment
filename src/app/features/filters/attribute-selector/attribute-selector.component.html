@@ -1,10 +1,10 @@
-<div [formGroup]="parentForm">
+<div [formGroup]="parentForm" class="fields-gap">
   @if (event) {
   <mat-form-field appearance="fill">
     <mat-label>Attribute</mat-label>
     <mat-select formControlName="attribute">
       @for (property of event.properties; track property.property) {
-      <mat-option [value]="property">{{ property.property }}</mat-option>
+      <mat-option [value]="property.property">{{ property.property }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
@@ -12,14 +12,14 @@
   <mat-form-field appearance="fill">
     <mat-label>Operator</mat-label>
     <mat-select formControlName="operator">
-      @for (operator of operators; track operator) {
+      @for (operator of filteredOperators; track operator) {
       <mat-option [value]="operator">{{ operator }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Value</mat-label>
-    <input matInput formControlName="value" />
+    <input matInput formControlName="value" [type]="inputType" />
   </mat-form-field>
   }
 </div>

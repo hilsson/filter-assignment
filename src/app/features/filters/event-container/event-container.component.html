@@ -1,0 +1,48 @@
+<form [formGroup]="form" class="flex-column background-white border-radius padding-medium">
+  <div formArrayName="events" class="margin-bottom">
+    @for (eventGroup of eventsForm.controls; let i = $index; track i) {
+    <div class="flex-row space-between align-center">
+      <h3>{{ i + 1 }}. step</h3>
+      <button mat-icon-button aria-label="Remove" (click)="removeEvent(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="flex-row" [formGroupName]="i">
+      <app-event-selector
+        [eventGroup]="eventsForm.at(i)"
+        [filteredEvents$]="filteredEvents$"
+        [index]="i"
+      ></app-event-selector>
+
+      <div formArrayName="attributes">
+        @for (attribute of getAttributes(i).controls; track attribute) {
+        <div class="padding-left flex-row">
+          <app-attribute-selector
+            [parentForm]="attribute"
+            [event]="eventGroup.get('event')?.value"
+            [operators]="operators"
+          ></app-attribute-selector>
+        </div>
+        } @if (getAttributes(i).length > 0) {
+        <button mat-raised-button class="margin-left" (click)="addAttribute(i)">
+          + Refine more
+        </button>
+        }
+      </div>
+
+      @if (eventGroup.get('event')?.value && getAttributes(i).length === 0) {
+      <button mat-raised-button class="margin-left" (click)="addAttribute(i)">
+        + Add an event attribute
+      </button>
+      }
+    </div>
+    <mat-divider class="margin-top"></mat-divider>
+    }
+  </div>
+  <button mat-stroked-button class="center margin-top" (click)="addEvent()">
+    + Add Funnel Step
+  </button>
+</form>
+<div class="apply-filters-container padding-medium">
+  <button mat-raised-button (click)="applyFilters()">Apply Filters</button>
+</div>

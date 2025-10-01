@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FilterEvent } from '../../../core/models/filter-event.model';
 import { EventService } from '../../../core/services/event.service';
-import { EventSelector } from '../event-selector/event-selector.component';
+import { EventContainer } from '../event-container/event-container.component';
 
 @Component({
   selector: 'app-filters-container',
-  imports: [CommonModule, EventSelector],
+  imports: [CommonModule, EventContainer],
   templateUrl: './filters-container.component.html',
   styleUrl: './filters-container.component.scss',
 })

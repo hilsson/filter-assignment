@@ -1,46 +1,17 @@
-<form [formGroup]="form" class="flex-column">
-  <div formArrayName="events">
-    @for (eventGroup of eventsForm.controls; let i = $index; track i) {
-    <h2>{{ i + 1 }}. step</h2>
-    <div [formGroupName]="i">
-      <mat-form-field appearance="fill" class="flex-row">
-        <mat-label>Event</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Select event"
-          formControlName="event"
-          [matAutocomplete]="auto"
-        />
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEvent">
-          @for (event of filteredEvents$[i] | async; track event.type) {
-          <mat-option [value]="event">{{ event.type }}</mat-option
-          >}
-        </mat-autocomplete>
-      </mat-form-field>
-
-      <div formArrayName="attributes">
-        @for (attribute of getAttributes(i).controls; track attribute) {
-        <div class="padding-left">
-          <app-attribute-selector
-            [parentForm]="attribute"
-            [event]="eventGroup.get('event')?.value"
-            [operators]="operators"
-          ></app-attribute-selector>
-        </div>
-        }
-      </div>
-
-      @if (eventGroup.get('event')?.value) {
-      <button mat-raised-button color="primary" (click)="addAttribute(i)">
-        + Add an event attribute
-      </button>
-      }
-    </div>
-    }
-  </div>
-  <button mat-stroked-button color="primary" class="center" (click)="addEvent()">
-    + Add Event
-  </button>
-</form>
-<button mat-raised-button color="primary" (click)="applyFilters()">Apply Filters</button>
+<div [formGroup]="eventGroup">
+  <mat-form-field appearance="fill">
+    <mat-label>Event</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Select event"
+      formControlName="event"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEvent">
+      @for (event of filteredEvents$[index] | async; track event.type) {
+      <mat-option [value]="event">{{ event.type }}</mat-option
+      >}
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
