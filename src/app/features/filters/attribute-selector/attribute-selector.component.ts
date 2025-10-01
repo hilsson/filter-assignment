@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FilterEvent } from '../../../core/models/filter-event.model';
 import { FiltersMaterialModule } from '../filters.module';
@@ -10,14 +10,12 @@ import { FiltersMaterialModule } from '../filters.module';
   templateUrl: './attribute-selector.component.html',
   styleUrl: './attribute-selector.component.scss',
 })
-export class AttributeSelector implements OnInit {
+export class AttributeSelector {
   @Input({ required: true }) parentForm: FormGroup = new FormGroup({});
   @Input({ required: true }) event: FilterEvent = { type: '', properties: [] };
   @Input({ required: true }) operators: string[] = [];
 
-  ngOnInit(): void {}
-
   get selectedAttribute(): string {
-    return this.parentForm.get('attribute')?.value;
+    return this.parentForm.get('attribute')?.value ?? null;
   }
 }
