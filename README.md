@@ -1,6 +1,12 @@
 # FilterAssignment
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3. This is an assigment for a recruitement process. It represents an analytics filter functionality.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3.
+This is an assigment for a recruitement process. It represents an analytics filter functionality.
+
+## Remarks
+
+A few unit tests are showcased in `event-container.component.spec.ts`.
+Not all functionality is complete, e.g. form validation, error and edge case handling at least is missing.
 
 ## Development server
 

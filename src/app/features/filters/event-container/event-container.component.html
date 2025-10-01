@@ -1,6 +1,6 @@
 <form [formGroup]="form" class="flex-column background-white border-radius padding-medium">
   <div formArrayName="events" class="margin-bottom">
-    @for (eventGroup of eventsForm.controls; let i = $index; track i) {
+    @for (eventGroup of eventsForm.controls; let i = $index; track eventGroup) {
     <div class="flex-row space-between align-center">
       <h3>{{ i + 1 }}. step</h3>
       <button mat-icon-button aria-label="Remove" (click)="removeEvent(i)">
@@ -39,10 +39,16 @@
     <mat-divider class="margin-top"></mat-divider>
     }
   </div>
+
   <button mat-stroked-button class="center margin-top" (click)="addEvent()">
     + Add Funnel Step
   </button>
 </form>
+
 <div class="apply-filters-container padding-medium">
   <button mat-raised-button (click)="applyFilters()">Apply Filters</button>
+
+  @if (modelApplied) {
+  <p>You can find the data model in the console :)</p>
+  }
 </div>

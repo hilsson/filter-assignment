@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -7,7 +7,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import {
   EventAttributeControls,
@@ -31,17 +31,21 @@ import { FiltersMaterialModule } from '../filters.module';
   templateUrl: './event-container.component.html',
   styleUrl: './event-container.component.scss',
 })
-export class EventContainer {
-  @Input() events: FilterEvent[] = [];
+export class EventContainer implements OnInit {
+  @Input() events$: Observable<FilterEvent[]> = of([]);
 
   form: FormGroup;
-  filteredEvents$: Observable<FilterEvent[]>[] = [];
+  filteredEvents$: Observable<FilterEvent[]> = of([]);
   operators = OPERATORS;
+  modelApplied = false;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       events: this.fb.array([]),
     });
+  }
+
+  ngOnInit(): void {
     this.addEvent();
   }
 
@@ -72,18 +76,22 @@ export class EventContainer {
 
   removeEvent(index: number): void {
     this.eventsForm.removeAt(index);
-    this.filteredEvents$.splice(index, 1);
+    this.filteredEvents$.pipe(
+      map((filteredEvents) => {
+        return filteredEvents.splice(index, 1);
+      })
+    );
   }
 
   filterEvent(eventControl: AbstractControl): void {
-    this.filteredEvents$.push(
-      eventControl.valueChanges.pipe(
-        startWith(''),
-        map((value) => {
-          const type = typeof value === 'string' ? value : value?.type;
-          return type ? filterEvents(this.events, type) : this.events.slice();
-        })
-      )
+    this.filteredEvents$ = combineLatest([
+      eventControl.valueChanges.pipe(startWith(eventControl.value ?? '')),
+      this.events$,
+    ]).pipe(
+      map(([value, events]) => {
+        const type = typeof value === 'string' ? value : value?.type;
+        return type ? filterEvents(events, type) : events.slice();
+      })
     );
   }
 
@@ -116,7 +124,7 @@ export class EventContainer {
 
   getDataModel() {
     return this.eventsForm.controls.map((eventGroup: FormGroup) => {
-      const event = eventGroup.get('event')?.value.type;
+      const event = eventGroup?.get('event')?.value.type;
       const attributes = this.extractAttributes(eventGroup);
       return { event, attributes };
     });
@@ -124,13 +132,14 @@ export class EventContainer {
 
   private extractAttributes(
     eventGroup: FormGroup
-  ): Array<{ attribute: any; operator: any; value: any }> {
+  ): Array<{ attribute: string; operator: string; value: string }> {
     const attributesArray = eventGroup.get('attributes') as FormArray;
     return attributesArray.controls.map((control) => (control as FormGroup).value);
   }
 
   applyFilters(): void {
     const model = this.getDataModel();
+    this.modelApplied = true;
     console.log('Applied Filters:', model);
   }
 }

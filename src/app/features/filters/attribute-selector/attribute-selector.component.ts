@@ -17,16 +17,15 @@ export class AttributeSelector {
 
   get selectedAttribute(): { property: string; type: string } | null {
     const selected = this.parentForm.get('attribute')?.value;
-    return this.event.properties.find((prop) => prop.property === selected) ?? null;
+    return this.event.properties?.find((prop) => prop.property === selected) ?? null;
   }
 
   get inputType(): string {
-    switch (this.selectedAttribute?.type) {
-      case 'number':
-        return 'number';
-      default:
-        return 'text';
+    if (this.selectedAttribute?.type === 'number') {
+      return 'number';
     }
+
+    return 'text';
   }
 
   get filteredOperators(): string[] {

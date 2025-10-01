@@ -9,7 +9,7 @@
       [matAutocomplete]="auto"
     />
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEvent">
-      @for (event of filteredEvents$[index] | async; track event.type) {
+      @for (event of filteredEvents$ | async; track event.type) {
       <mat-option [value]="event">{{ event.type }}</mat-option
       >}
     </mat-autocomplete>
