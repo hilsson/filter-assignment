@@ -1,5 +1,6 @@
-<form [formGroup]="form">
-  <mat-form-field appearance="fill">
+<h2>1. step {{ selectedEvent?.type }}</h2>
+<form [formGroup]="form" class="flex-column">
+  <mat-form-field appearance="fill" class="flex-row">
     <mat-label>Event</mat-label>
     <input
       matInput
@@ -14,4 +15,16 @@
       >}
     </mat-autocomplete>
   </mat-form-field>
+
+  @for (row of rows.controls; track row) {
+  <div class="padding-left">
+    <app-attribute-selector
+      [parentForm]="row"
+      [event]="selectedEvent"
+      [operators]="operators"
+    ></app-attribute-selector>
+  </div>
+  } @if (selectedEvent) {
+  <button mat-raised-button color="primary" (click)="addRow()">+ Add an event attribute</button>
+  }
 </form>
