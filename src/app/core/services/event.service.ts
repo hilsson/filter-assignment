@@ -5,6 +5,7 @@ import { FilterEvent } from '../models/filter-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
+  // hardcoded URL for simplicity, instead of an environment variable
   private apiUrl = 'https://br-fe-assignment.github.io/customer-events/events.json';
 
   constructor(private http: HttpClient) {}
