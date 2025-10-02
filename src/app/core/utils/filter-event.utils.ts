@@ -5,6 +5,10 @@ export function filterEvents(events: FilterEvent[], value: string): FilterEvent[
   return events.filter((event) => event.type.toLowerCase().includes(filterValue));
 }
 
+export function filterOperatorsByType(operators: string[], matchingOperators: string[]): string[] {
+  return operators.filter((operator) => matchingOperators.includes(operator));
+}
+
 export const OPERATORS = [
   'equals',
   'does not equal',

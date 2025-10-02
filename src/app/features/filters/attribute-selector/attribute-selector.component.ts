@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FilterEvent } from '../../../core/models/filter-event.model';
+import { filterOperatorsByType } from '../../../core/utils/filter-event.utils';
 import { FiltersMaterialModule } from '../filters.module';
 
 @Component({
@@ -30,11 +31,12 @@ export class AttributeSelector {
 
   get filteredOperators(): string[] {
     return this.inputType === 'number'
-      ? this.filterOperatorsByType(['in between', 'greater than', 'less than', 'equals'])
-      : this.filterOperatorsByType(['equals', 'does not equal', 'contains', 'does not contain']);
-  }
-
-  filterOperatorsByType(operatorsArray: string[]): string[] {
-    return this.operators.filter((operator) => operatorsArray.includes(operator));
+      ? filterOperatorsByType(this.operators, ['in between', 'greater than', 'less than', 'equals'])
+      : filterOperatorsByType(this.operators, [
+          'equals',
+          'does not equal',
+          'contains',
+          'does not contain',
+        ]);
   }
 }
